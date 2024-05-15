@@ -1,24 +1,31 @@
 <?php
 
-define("CHUNK_LENGTH", 10 * 1024 * 1024);
+declare(strict_types=1);
+
+namespace Kck\TextStat;
+
+require 'vendor/autoload.php';
+
+use Jstewmc\Chunker\File;
 
 if (!isset($argv[1])) {
     exit("Filename is not provided" . PHP_EOL);
 }
 
-$file = fopen($argv[1], "r");
-
-if (!$file) {
-    exit("File not found" . PHP_EOL);
+try {
+    $chunker = new File($argv[1]);
+} catch (\Exception $exception) {
+    exit($exception->getMessage() . PHP_EOL);
 }
 
 $countsArray = [];
 $fileSize = 0;
 
-while (!feof($file)) {
-    $chunk = fgets($file, CHUNK_LENGTH);
+while (true) {
+    $chunk = $chunker->current();
+    $chunker->next();
 
-    if ($chunk === false) {
+    if (!$chunk) {
         break;
     }
 
@@ -31,12 +38,16 @@ while (!feof($file)) {
 
         $countsArray[$char]++;
     }
+
+    if (!$chunker->hasNextChunk()) {
+        break;
+    }
 }
 
 ksort($countsArray);
 
 foreach ($countsArray as $char => $count) {
-    printf("%s - %s%%" . PHP_EOL, charToReadable($char), formatPercentage($count / $fileSize));
+    printf("%s - %s%%" . PHP_EOL, charToReadable(strval($char)), formatPercentage($count / $fileSize));
 }
 
 print(PHP_EOL);

@@ -5,7 +5,7 @@
 ## Запуск программы
 
 Запустить программу можно с помощью команды:
-`php textstat.php test-files/lorem.txt`
+`php src/textstat.php test-files/lorem.txt`
 
 Можно использовать другие файлы для теста программы, которые находятся в
 директории `test-files`.

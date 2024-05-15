@@ -1,0 +1,19 @@
+{
+    "name": "kck/text-stat",
+    "description": "Utility to calculate symbols frequency in a file.",
+    "type": "project",
+    "require": {
+        "jstewmc/chunker": "^0.2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kck\\TextStat\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nikolay Shepelev",
+            "email": "shepelevnikolay97@gmail.com"
+        }
+    ]
+}
