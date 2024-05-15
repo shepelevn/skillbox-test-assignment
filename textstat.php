@@ -1,6 +1,6 @@
 <?php
 
-define("CHUNK_LENGTH", 32768);
+define("CHUNK_LENGTH", 1024 * 1024);
 
 if (!isset($argv[1])) {
     exit("Filename is not provided" . PHP_EOL);
