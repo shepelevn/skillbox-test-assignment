@@ -1,6 +1,6 @@
 <?php
 
-define("CHUNK_LENGTH", 8192);
+define("CHUNK_LENGTH", 32768);
 
 if (!isset($argv[1])) {
     exit("Filename is not provided" . PHP_EOL);
@@ -16,10 +16,10 @@ $countsArray = [];
 $fileSize = 0;
 
 while (!feof($file)) {
-    $chunk = fread($file, CHUNK_LENGTH);
+    $chunk = fgets($file, CHUNK_LENGTH);
 
     if ($chunk === false) {
-        exit("Error while reading file");
+        break;
     }
 
     $fileSize += strlen($chunk);
@@ -39,6 +39,8 @@ foreach ($countsArray as $char => $count) {
     printf("%s - %s%%" . PHP_EOL, charToReadable($char), formatPercentage($count / $fileSize));
 }
 
+print(PHP_EOL);
+
 function charToReadable(string $char): string
 {
     return match(mb_ord($char)) {
@@ -47,6 +49,7 @@ function charToReadable(string $char): string
         12 => '0x12',
         13 => '0x13',
         32 => '(space)',
+        160 => '(non-breaking-space)',
         default => $char,
     };
 }
